@@ -6,7 +6,9 @@ import org.junit.Test;
 /**
  * Created by taihejin on 16-6-19.
  */
+
 public class E16_2_2 {
+
     public int maxValue(int[] values, int[] weights, int W) {
         int row = values.length + 1;
         int column = W + 1;
@@ -19,10 +21,7 @@ public class E16_2_2 {
         }
         for (int r = 1; r < row; r++) {
             for (int c = 1; c < column; c++) {
-                int value = 0;
-                if (c >= weights[r - 1]) {
-                    value = matrix[r - 1][c - weights[r - 1]] + values[r - 1];
-                }
+                int value = c >= weights[r - 1] ? matrix[r - 1][c - weights[r - 1]] + values[r - 1] : 0;
                 matrix[r][c] = Math.max(value, matrix[r - 1][c]);
             }
         }
