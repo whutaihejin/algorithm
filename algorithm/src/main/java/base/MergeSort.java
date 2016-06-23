@@ -13,17 +13,17 @@ public class MergeSort {
         int k = l1;
         int i = l1;
         int j = l2;
-        for (; i <= h1 && j <= h2; ) {
+        for (; i <= h1 && j <= h2;) {
             if (nums[i] <= nums[j]) {
                 backup[k++] = nums[i++];
             } else {
                 backup[k++] = nums[j++];
             }
         }
-        for (; i <= h1; ) {
+        for (; i <= h1;) {
             backup[k++] = nums[i++];
         }
-        for (; j <= h2; ) {
+        for (; j <= h2;) {
             backup[k++] = nums[j++];
         }
         // copy back to nums array
