@@ -1,9 +1,11 @@
+import org.junit.Test;
+
 /**
  * Created by taihejin on 16-6-5.
  */
 public class P21 {
 
-    public static class ListNode {
+    private static class ListNode {
         int val;
         ListNode next;
         ListNode(int x) { val = x; }
@@ -13,97 +15,105 @@ public class P21 {
         public String toString() {
             StringBuilder builder = new StringBuilder();
             ListNode p = this;
-            while (p != null) {
+            while (p.next != null) {
                 builder.append(p.val).append("->");
                 p = p.next;
             }
-            builder.deleteCharAt(builder.length() - 1);
-            builder.deleteCharAt(builder.length() - 1);
+            builder.append(p.val);
             return builder.toString();
         }
     }
 
-    public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        ListNode head = null;
-        ListNode p = null;
+
+
+    private ListNode dummy = new ListNode(0, null);
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2;
+        if (l2 == null) return l1;
+        ListNode tail = dummy;
         while (l1 != null && l2 != null) {
-            int min = 0;
             if (l1.val < l2.val) {
-                min = l1.val;
+                tail.next = l1;
+                tail = l1;
                 l1 = l1.next;
             } else {
-                min = l2.val;
+                tail.next = l2;
+                tail = l2;
                 l2 = l2.next;
             }
-            if (head == null) {
-                head = new ListNode(min);
-                p = head;
-            } else {
-                ListNode q = new ListNode(min);
-                p.next = q;
-                p = q;
-            }
         }
-        while (l1 != null) {
-            if (head == null) {
-                head = new ListNode(l1.val);
-                p = head;
-            } else {
-                ListNode q = new ListNode(l1.val);
-                p.next = q;
-                p = q;
-            }
-            l1 = l1.next;
+        if (l1 != null) {
+            tail.next = l1;
         }
-        while (l2 != null) {
-            if (head == null) {
-                head = new ListNode(l2.val);
-                p = head;
-            } else {
-                ListNode q = new ListNode(l2.val);
-                p.next = q;
-                p = q;
-            }
-            l2 = l2.next;
+        if (l2 != null) {
+            tail.next = l2;
         }
-        return head;
+        return dummy.next;
     }
 
-    public static void doTest() {
+    @Test
+    public void test1() {
+        ListNode node = new ListNode(2, null);
+        System.out.println(node);
+    }
+
+    @Test
+    public void test2() {
+        ListNode n2 = new ListNode(2, null);
+        ListNode n1 = new ListNode(1, n2);
+        System.out.println(n1);
+    }
+
+    @Test
+    public void test3() {
         ListNode n5 = new ListNode(5, null);
         ListNode n4 = new ListNode(4, n5);
         ListNode n3 = new ListNode(3, n4);
         ListNode n2 = new ListNode(2, n3);
         ListNode l1 = new ListNode(1, n2);
-
         ListNode m5 = new ListNode(10, null);
         ListNode m4 = new ListNode(9, m5);
         ListNode m3 = new ListNode(8, m4);
         ListNode m2 = new ListNode(7, m3);
         ListNode l2 = new ListNode(6, m2);
-
         System.out.println(l1);
         System.out.println(l2);
         System.out.println(mergeTwoLists(l1, l2));
-        System.out.println("######################");
-
-        System.out.println(l1);
-        System.out.println("null");
-        System.out.println(mergeTwoLists(l1, null));
-        System.out.println("######################");
-
-        System.out.println("null");
-        System.out.println(l2);
-        System.out.println(mergeTwoLists(null, l2));
-        System.out.println("######################");
-
-        System.out.println("null");
-        System.out.println("null");
-        System.out.print(mergeTwoLists(null, null));
-        System.out.println("######################");
     }
 
-    public static void main(String[] args) {
-        doTest();
+    @Test
+    public void test4() {
+        ListNode n5 = new ListNode(5, null);
+        ListNode n4 = new ListNode(4, n5);
+        ListNode n3 = new ListNode(3, n4);
+        ListNode n2 = new ListNode(2, n3);
+        ListNode l1 = new ListNode(1, n2);
+        ListNode l2 = null;
+        System.out.println(l1);
+        System.out.println(l2);
+        System.out.println(mergeTwoLists(l1, l2));
+    }
+
+    @Test
+    public void test5() {
+        ListNode l1 = null;
+        ListNode m5 = new ListNode(10, null);
+        ListNode m4 = new ListNode(9, m5);
+        ListNode m3 = new ListNode(8, m4);
+        ListNode m2 = new ListNode(7, m3);
+        ListNode l2 = new ListNode(6, m2);
+        System.out.println(l1);
+        System.out.println(l2);
+        System.out.println(mergeTwoLists(l1, l2));
+    }
+
+    @Test
+    public void test6() {
+        ListNode l1 = null;
+        ListNode l2 = null;
+        System.out.println(l1);
+        System.out.println(l2);
+        System.out.println(mergeTwoLists(l1, l2));
     }
 }
