@@ -24,6 +24,14 @@ void link_show(Node* l) {
   std::cout << *l << std::endl;
 }
 
+void destory(Node* l) {
+  while (l) {
+    Node* q = l;
+    l = l->next_;
+    delete q;
+  }
+}
+
 Node* array_to_link(int* nums, int size) {
   std::auto_ptr<Node> dummy(new Node());
   Node* tail = dummy.get();
@@ -40,8 +48,8 @@ Node* array_to_link(int* nums, int size) {
 Node* merge(Node* l1, Node*l2) {
   if (l1 == NULL) return l2;
   if (l2 == NULL) return l1;
-  Node* dummy = new Node();
-  Node* tail = dummy;
+  std::auto_ptr<Node> dummy(new Node);
+  Node* tail = dummy.get();
   while (l1 != NULL && l2 != NULL) {
     if (l1->key_ <= l2->key_) {
       tail->next_ = l1;
@@ -95,6 +103,7 @@ void test2() {
   Node* l2 = NULL;
   Node* l = merge(l1, l2);
   assert(l == l1);
+  delete l1;
 }
 
 void test3() {
@@ -102,6 +111,7 @@ void test3() {
   Node* l2 = new Node(2, NULL);
   Node* l = merge(l1, l2);
   assert(l = l2);
+  delete l2;
 }
 
 void test4() {
@@ -112,12 +122,15 @@ void test4() {
   Node* l = merge(l1, l2);
   link_show(l);
   assert(l == l2);
+  delete l1;
+  delete l2;
 }
 
 void test5() {
   int arr[] = {5, 4, 3, 2, 1, -1};
   Node* l = array_to_link(arr, sizeof(arr) / sizeof(arr[0]));
   link_show(l);
+  destory(l);
 }
 
 void test6() {
@@ -129,6 +142,7 @@ void test6() {
   link_show(l2);
   Node* l = merge(l1, l2);
   link_show(l);
+  destory(l);
 }
 
 void test7() {
@@ -137,6 +151,7 @@ void test7() {
   link_show(l);
   Node* middle = find_middle(l);
   assert(middle->key_ == 2);
+  destory(l);
 }
 
 void test8() {
@@ -145,6 +160,7 @@ void test8() {
   link_show(l);
   Node* middle = find_middle(l);
   assert(middle->key_ == 3);
+  destory(l);
 }
 
 void test9() {
@@ -153,6 +169,7 @@ void test9() {
   link_show(l);
   Node* sl = mergeSort(l);
   link_show(sl);
+  destory(sl);
 }
 
 int main(int argc, char* argv[]) {
