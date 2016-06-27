@@ -25,7 +25,6 @@ public class P21 {
     }
 
 
-
     private ListNode dummy = new ListNode(0, null);
 
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
