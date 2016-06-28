@@ -89,7 +89,7 @@ Node* doF3(Node* head) {
 }
 
 // 反转方法3: 递归法
-// 思想：递归调整每个节点的指针
+// 思想：递归调整每个节点的指针, 注意每个节点维护的信息, 一定要理解head->next_->next_ = head 这就话的含义, 以及为什么要调整head->next_ = NULL！
 Node* f3(Node* head) {
   if (head == NULL) return head;
   return doF3(head);
