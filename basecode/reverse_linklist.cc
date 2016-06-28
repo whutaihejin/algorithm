@@ -77,22 +77,26 @@ Node* f2(Node* head) {
   return prev;
 }
 
+Node* doF3(Node* head) {
+  if (head->next_ == NULL) {
+    return head;
+  } else {
+    Node* new_head = doF3(head->next_);
+    head->next_->next_ = head;
+    head->next_ = NULL;
+    return new_head;
+  }
+}
+
 // 反转方法3: 递归法
 // 思想：递归调整每个节点的指针
 Node* f3(Node* head) {
   if (head == NULL) return head;
-  return NULL;
-}
-
-Node* doF3(Node* head) {
-  if (head->next_ == NULL) return head;
-  Node* node = doF3(head->next_);
-  node->next_ = head;
-  return head;
+  return doF3(head);
 }
 
 Node* reverse(Node* head) {
-  return f2(head);
+  return f3(head);
 }
 
 void test1() {
