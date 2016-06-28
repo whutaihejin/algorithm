@@ -8,7 +8,7 @@ public class P21 {
     private static class ListNode {
         int val;
         ListNode next;
-        ListNode(int x) { val = x; }
+        ListNode(int x) { val = x; next = null; }
         ListNode(int x, ListNode n) { val = x; next = n; }
 
         @Override
@@ -23,7 +23,6 @@ public class P21 {
             return builder.toString();
         }
     }
-
 
     private ListNode dummy = new ListNode(0, null);
 
@@ -53,25 +52,25 @@ public class P21 {
 
     @Test
     public void test1() {
-        ListNode node = new ListNode(2, null);
+        ListNode node = new ListNode(2);
         System.out.println(node);
     }
 
     @Test
     public void test2() {
-        ListNode n2 = new ListNode(2, null);
+        ListNode n2 = new ListNode(2);
         ListNode n1 = new ListNode(1, n2);
         System.out.println(n1);
     }
 
     @Test
     public void test3() {
-        ListNode n5 = new ListNode(5, null);
+        ListNode n5 = new ListNode(5);
         ListNode n4 = new ListNode(4, n5);
         ListNode n3 = new ListNode(3, n4);
         ListNode n2 = new ListNode(2, n3);
         ListNode l1 = new ListNode(1, n2);
-        ListNode m5 = new ListNode(10, null);
+        ListNode m5 = new ListNode(10);
         ListNode m4 = new ListNode(9, m5);
         ListNode m3 = new ListNode(8, m4);
         ListNode m2 = new ListNode(7, m3);
@@ -83,7 +82,7 @@ public class P21 {
 
     @Test
     public void test4() {
-        ListNode n5 = new ListNode(5, null);
+        ListNode n5 = new ListNode(5);
         ListNode n4 = new ListNode(4, n5);
         ListNode n3 = new ListNode(3, n4);
         ListNode n2 = new ListNode(2, n3);
@@ -97,7 +96,7 @@ public class P21 {
     @Test
     public void test5() {
         ListNode l1 = null;
-        ListNode m5 = new ListNode(10, null);
+        ListNode m5 = new ListNode(10);
         ListNode m4 = new ListNode(9, m5);
         ListNode m3 = new ListNode(8, m4);
         ListNode m2 = new ListNode(7, m3);
