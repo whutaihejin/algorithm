@@ -94,26 +94,25 @@ Node* f2(Node* head) {
 
 // 反转双向链表3: 递归法
 // 思想： 递归从最后一个节点向前开始遍历, 探索还有没有更好的方式，大道至简！
-Node* doF3(Node* head) {
-  if (head->next == NULL) return head;
-  Node* new_head = doF3(head->next);
-  Node* p = head->next;
-  p->prev = p->next;
-  p->next = head;
-  return new_head;
-}
-
 Node* f3(Node* head) {
   if (head == NULL) return head;
-  Node* new_head = doF3(head);
+  if (head->next == NULL) {
+    Node* prev = head->prev;
+    head->prev = head->next;
+    head->next = prev;
+    return head;
+  }
+  Node* new_head = f3(head->next);
+  Node* prev = head->prev;
   head->prev = head->next;
-  head->next = NULL;
+  head->next = prev;
   return new_head;
 }
 
 Node* reverse(Node* head) {
   //return f1(head);
   //return f2(head);
+  //return f3(head);
   return f3(head);
 }
 
