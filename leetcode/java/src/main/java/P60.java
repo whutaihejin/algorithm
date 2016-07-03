@@ -8,6 +8,39 @@ import java.util.Arrays;
  */
 public class P60 {
 
+    /* Problem description:
+    The set [1,2,3,…,n] contains a total of n! unique permutations.
+    By listing and labeling all of the permutations in order,
+    We get the following sequence (ie, for n = 3):
+    "123"
+    "132"
+    "213"
+    "231"
+    "312"
+    "321"
+    Given n and k, return the kth permutation sequence.*/
+
+    public String getPermutation(int n, int k) {
+        int[] nums = new int[n];
+        int count = 1;
+        for (int i = 0; i < n; i++) {
+            nums[i] = i + 1;
+            count *= (i + 1);
+        }
+        k--;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            count /= (n - i);
+            int selected = k / count;
+            k %= count;
+            builder.append(nums[selected]);
+            for (int j = selected + 1; j < n; j++) {
+                nums[j - 1] = nums[j];
+            }
+        }
+        return builder.toString();
+    }
+
     public void next(int[] nums) {
         if (nums == null || nums.length <= 1) {
             return;
@@ -45,7 +78,7 @@ public class P60 {
         }
     }
 
-    public String getPermutation(int n, int k) {
+    public String doGetPermutation(int n, int k) {
         if (n < 1) {
             return "";
         }
@@ -127,14 +160,22 @@ public class P60 {
 
     @Test
     public void test8() {
-        Assert.assertEquals("123", getPermutation(3, 7));
-        Assert.assertEquals("132", getPermutation(3, 8));
+        Assert.assertEquals("", getPermutation(0, 0));
+        Assert.assertEquals("1", getPermutation(1, 1));
     }
 
     @Test
     public void test9() {
         getPermutation(8, 8590);
     }
+
+    @Test
+    public void test10() {
+        Assert.assertEquals("12", getPermutation(2, 1));
+        Assert.assertEquals("21", getPermutation(2, 2));
+    }
+
+
 
 
 
