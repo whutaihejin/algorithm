@@ -13,38 +13,31 @@ public class P71 {
         if (path == null || path.isEmpty()) {
             return "/";
         }
-        assert path.charAt(0) == '/';
+        path += "/";
+        StringBuilder builder = new StringBuilder();
+        int size = path.length();
         Deque<String> deque = new ArrayDeque<String>();
-        for (int i = 1; i < path.length();) {
-            if (path.charAt(i) == '/') {
-                i++;
-                continue;
-            }
-            int j = i + 1;
-            while (j < path.length() && path.charAt(j) != '/') {
-                j++;
-            }
-            String item = path.substring(i, j);
-            if (item.equals(".")) {
-                // ignore
-            } else if (item.equals("..")) {
-                if (!deque.isEmpty()) {
-                    deque.removeLast();
+        for (int i = 0; i < size; i++) {
+            char ch = path.charAt(i);
+            if (ch == '/') {
+                String item = builder.toString();
+                if (item.isEmpty() || item.equals(".")) {
+                    // ignore
+                } else if (item.equals("..")) {
+                    if (!deque.isEmpty()) deque.removeLast();
+                } else {
+                    deque.offer(item);
                 }
+                builder.delete(0, builder.length()); // clear the builder
             } else {
-                deque.offer(item);
-            }
-            if (j >= path.length()) {
-                break;
-            } else {
-                i = j + 1;
+                builder.append(ch);
             }
         }
-        StringBuilder builder = new StringBuilder();
+        builder.delete(0, builder.length()); // clear the builder
         while (!deque.isEmpty()) {
             builder.append('/').append(deque.pollFirst());
         }
-        return  builder.length() == 0 ? "/" : builder.toString();
+        return builder.length() == 0 ? "/" : builder.toString();
     }
 
     @Test
@@ -66,5 +59,5 @@ public class P71 {
     public void test2() {
         Assert.assertEquals("/", simplifyPath("///"));
     }
-    
+
 }
