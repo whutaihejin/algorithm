@@ -1,5 +1,5 @@
 .PHONY : ALL
-ALL :  p10 p1 p2 p3 p4 p4p p7 p8
+ALL :  p10 p1 p2 p32 p3 p4 p4p p7 p8
 
 p10:
 	g++ -g -o p10 p10.cc
@@ -7,6 +7,8 @@ p1:
 	g++ -g -o p1 p1.cc
 p2:
 	g++ -g -o p2 p2.cc
+p32:
+	g++ -g -o p32 p32.cc
 p3:
 	g++ -g -o p3 p3.cc
 p4:
@@ -20,4 +22,4 @@ p8:
 
 .PHONY : clean
 clean : 
-	 rm -rf  p10 p1 p2 p3 p4 p4p p7 p8
+	 rm -rf  p10 p1 p2 p32 p3 p4 p4p p7 p8
