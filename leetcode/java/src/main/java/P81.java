@@ -20,7 +20,9 @@ public class P81 {
         int high = nums.length - 1;
         while (low <= high) {
             int middle = low + (high - low) / 2;
-            if (nums[low] < nums[middle]) {
+            if (target == nums[middle]) {
+                return true;
+            } else if (nums[low] < nums[middle]) {
                 if (nums[low] <= target && target < nums[middle]) {
                     high = middle - 1;
                 } else {
@@ -32,8 +34,6 @@ public class P81 {
                 } else {
                     high = middle - 1;
                 }
-            } else if (target == nums[middle]) {
-                return true;
             } else {
                 return linearSearch(nums, low, high, target);
             }
@@ -131,6 +131,12 @@ public class P81 {
         Assert.assertEquals(false, search(arr, -15));
         Assert.assertEquals(false, search(arr, 2));
         Assert.assertEquals(false, search(arr, 26));
+    }
+
+    @Test
+    public void test8() {
+        int[] arr = {1, 3};
+        Assert.assertEquals(true, search(arr, 1));
     }
 
 
