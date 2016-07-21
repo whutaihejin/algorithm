@@ -24,7 +24,7 @@ public class P78 {
         tmp.remove(index);
     }
 
-    public List<List<Integer>> subsets(int[] nums) {
+    public List<List<Integer>> subsetsRecursive(int[] nums) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
         if (nums == null || nums.length <= 0) {
             return result;
@@ -32,6 +32,38 @@ public class P78 {
         List<Integer> tmp = new ArrayList<Integer>();
         doSubsets(nums, 0, tmp, result);
         return result;
+    }
+
+    public List<List<Integer>> subsetsIterator1(int[] nums) {
+        List<List<Integer>> ret = new ArrayList<List<Integer>>();
+        if (nums == null || nums.length <= 0) return ret;
+        Arrays.sort(nums);
+        for (int i = 0; i < (1 << nums.length); i++) {
+            List<Integer> item = new ArrayList<Integer>();
+            for (int j = 0; j < nums.length; j++) {
+                if (((i >> j) & 0x01) == 1) {
+                    item.add(nums[j]);
+                }
+            }
+            ret.add(item);
+        }
+        return ret;
+    }
+
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> ret = new ArrayList<List<Integer>>();
+        if (nums == null || nums.length <= 0) return ret;
+        ret.add(new ArrayList<Integer>());
+        for (int i = 0; i < nums.length; i++) {
+            int limit = ret.size();
+            for (int k = 0; k < limit; k++) {
+                List<Integer> item = new ArrayList<Integer>(ret.get(k));
+                item.add(nums[i]);
+                ret.add(item);
+                System.out.println(Arrays.toString(item.toArray()));
+            }
+        }
+        return ret;
     }
 
     @Test
