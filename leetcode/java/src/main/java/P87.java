@@ -9,7 +9,49 @@ import java.util.Arrays;
 
 public class P87 {
 
+    @Test
+    public void test3() {
+        Assert.assertEquals(true, isScramble("a", "a"));
+    }
+
+    @Test
+    public void test4() {
+        Assert.assertEquals(true, isScramble("ab", "ab"));
+        Assert.assertEquals(true, isScramble("ab", "ba"));
+        Assert.assertEquals(true, isScramble("abc", "abc"));
+        Assert.assertEquals(true, isScramble("abc", "acb"));
+        Assert.assertEquals(true, isScramble("abc", "cba"));
+        Assert.assertEquals(true, isScramble("abc", "bac"));
+    }
+
     public boolean isScramble(String s1, String s2) {
+        if (s1.length() != s2.length()) {
+            return false;
+        }
+        int size = s1.length();
+        boolean[][][] state = new boolean[size][size][size];
+        for (int r = 0; r < size; r++) {
+            for (int c = 0; c < size; c++) {
+                state[0][r][c] = (s1.charAt(r) == s2.charAt(c));
+            }
+        }
+        for (int l = 1; l < size; l++) {
+            for (int i = size - l - 1; i >= 0; i--) {
+                for (int j = size - l - 1; j >= 0; j--) {
+                    for (int k = 0; k < l; k++) {
+                        if ((state[k][i][j] && state[l - k - 1][i + k + 1][j + k + 1])
+                                || (state[k][i][j + l - k] && state[l - k - 1][i + k + 1][j])) {
+                            state[l][i][j] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return state[size - 1][0][0];
+    }
+
+    public boolean isScrambleRecursive(String s1, String s2) {
          System.out.println(String.format("call -> %s %s", s1, s2));
         if (s1.length() != s2.length()) {
             return false;
