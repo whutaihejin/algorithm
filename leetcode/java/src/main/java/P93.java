@@ -6,16 +6,19 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class P93 {
 
-    private long splitNumber(String s, int low, int high) {
+    private boolean valid(String str) {
+        if (str.length() == 1) return true;
+        if (str.startsWith("0") || str.length() > 3) return false;
         long val = 0;
-        for (; low <= high; low++) {
-            val = val * 10 + s.charAt(low) - '0';
+        for (int low = 0; low < str.length(); low++) {
+            val = val * 10 + str.charAt(low) - '0';
         }
-        return val;
+        return val > 255 ? false : true;
     }
 
     private String build(String s, int i, int j, int k) {
@@ -33,12 +36,12 @@ public class P93 {
         List<String> ret = new ArrayList<String>();
         int size = s.length();
         for (int i = 0; i < Math.min(3, size); i++) {
-            if (splitNumber(s, 0, i) > 255) continue;
+            if (!valid(s.substring(0, i + 1))) continue;
             for (int j = i + 1; j < Math.min(i + 4, size); j++) {
-                if (splitNumber(s, i + 1, j) > 255) continue;
+                if (!valid(s.substring(i + 1, j + 1))) continue;
                 for (int k = j + 1; k < Math.min(j + 4, size); k++) {
-                    if (splitNumber(s, j + 1, k) > 255 || k + 1 > size - 1) continue;
-                    if (splitNumber(s, k + 1, size - 1) <= 255) {
+                    if (!valid(s.substring(j + 1, k + 1)) || k + 1 > size - 1) continue;
+                    if (valid(s.substring(k + 1, size))) {
                         ret.add(build(s, i, j, k));
                     }
                 }
@@ -55,11 +58,22 @@ public class P93 {
 
     @Test
     public void test1() {
-        String s = "25525511135";
-        Assert.assertEquals(2, splitNumber(s, 0, 0));
-        Assert.assertEquals(25, splitNumber(s, 0, 1));
-        Assert.assertEquals(255, splitNumber(s, 0, 2));
-        Assert.assertEquals(55, splitNumber(s, 1, 2));
-        Assert.assertEquals(552, splitNumber(s, 1, 3));
+        Assert.assertEquals(true, valid("12"));
+        Assert.assertEquals(true, valid("255"));
+        Assert.assertEquals(false, valid("256"));
+        Assert.assertEquals(true, valid("0"));
+        Assert.assertEquals(false, valid("011"));
+    }
+
+    @Test
+    public void test2() {
+        String s = "010010";
+        Assert.assertEquals(2, restoreIpAddresses(s).size());
+    }
+
+    @Test
+    public void test3() {
+        Assert.assertEquals(false, new String("0").matches("0\\d+"));
+        Assert.assertEquals(true, new String("01").matches("0\\d+"));
     }
 }
