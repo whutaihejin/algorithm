@@ -5,7 +5,11 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.List;
+import java.util.Queue;
+import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Collections;
 
 public class P107 {
 
@@ -62,7 +66,9 @@ public class P107 {
         Assert.assertEquals(1, ret.size());
     }
 
+    @Test
     public void test2() {
         List<List<Integer>> ret = levelOrderBottom(null);
+        Assert.assertEquals(true, ret.isEmpty());
     }
 }
