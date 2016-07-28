@@ -1,6 +1,5 @@
 import org.junit.Assert;
 import org.junit.Test;
-import sun.reflect.generics.tree.Tree;
 
 /**
  * Created by taihejin on 16-7-28.
