@@ -22,27 +22,17 @@ public class P114 {
         }
     }
 
-    public void flatten(TreeNode root) {
+    public void flattenHelper(TreeNode root, TreeNode[] next) {
         if (root == null) return;
-        Deque<TreeNode> stack = new ArrayDeque<TreeNode>();
-        List<TreeNode> list = new ArrayList<TreeNode>();
-        while (root != null || !stack.isEmpty()) {
-            while (root != null) {
-                list.add(root);
-                stack.push(root);
-                root = root.left;
-            }
-            TreeNode top = stack.pop();
-            root = top.right;
-        }
-        TreeNode prev = new TreeNode(-1);
-        for (int i = 0; i < list.size(); i++) {
-            TreeNode curr = list.get(i);
-            curr.left = null;
-            curr.right = null;
-            prev.right = curr;
-            prev = curr;
-        }
+        flattenHelper(root.right, next);
+        flattenHelper(root.left, next);
+        root.right = next[0];
+        root.left = null;
+        next[0] = root;
+    }
+
+    public void flatten(TreeNode root) {
+        flattenHelper(root, new TreeNode[]{null});
     }
 
     @Test
