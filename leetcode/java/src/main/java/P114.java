@@ -1,14 +1,12 @@
 import org.junit.Test;
-import sun.reflect.generics.tree.Tree;
-
-import javax.transaction.TransactionRequiredException;
-import java.util.*;
 
 /**
  * Created by taihejin on 16-7-28.
  */
 
 public class P114 {
+
+    private TreeNode next = null;
 
     private static class TreeNode {
         int val;
@@ -22,17 +20,13 @@ public class P114 {
         }
     }
 
-    public void flattenHelper(TreeNode root, TreeNode[] next) {
-        if (root == null) return;
-        flattenHelper(root.right, next);
-        flattenHelper(root.left, next);
-        root.right = next[0];
-        root.left = null;
-        next[0] = root;
-    }
-
     public void flatten(TreeNode root) {
-        flattenHelper(root, new TreeNode[]{null});
+        if (root == null) return;
+        flatten(root.right);
+        flatten(root.left);
+        root.right = next;
+        root.left = null;
+        next = root;
     }
 
     @Test
@@ -66,6 +60,21 @@ public class P114 {
         // 2   3
         TreeNode n2 = new TreeNode(2);
         TreeNode n3 = new TreeNode(3);
+        TreeNode root = new TreeNode(1, n2, n3);
+        flatten(root);
+    }
+
+    @Test
+    public void test4() {
+        //     1
+        //  2      3
+        //4   5  6   7
+        TreeNode n4 = new TreeNode(4);
+        TreeNode n5 = new TreeNode(5);
+        TreeNode n2 = new TreeNode(2, n4, n5);
+        TreeNode n6 = new TreeNode(6);
+        TreeNode n7 = new TreeNode(7);
+        TreeNode n3 = new TreeNode(3, n6, n7);
         TreeNode root = new TreeNode(1, n2, n3);
         flatten(root);
     }
