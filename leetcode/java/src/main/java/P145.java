@@ -6,15 +6,18 @@ import java.util.*;
 /**
  * Created by taihejin on 16-8-1.
  */
+
 public class P145 {
 
     private static class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
+
         TreeNode(int x) {
             val = x;
         }
+
         TreeNode(int x, TreeNode left, TreeNode right) {
             this.val = x;
             this.left = left;
@@ -22,33 +25,20 @@ public class P145 {
         }
     }
 
-    private static class Spy {
-        TreeNode node;
-        Boolean isRightVisited;
-        Spy(TreeNode node, Boolean isRightVisited) {
-            this.node = node;
-            this.isRightVisited = isRightVisited;
-        }
-    }
-
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> ret = new ArrayList<Integer>();
-        if (root == null) return ret;
-        Deque<Spy> stack = new ArrayDeque<Spy>();
+        if (root == null) return ret;\
+        Deque<TreeNode> stack = new ArrayDeque<TreeNode>();
         while (root != null || !stack.isEmpty()) {
             while (root != null) {
-                stack.push(new Spy(root, false));
-                root = root.left;
+                ret.add(root.val);
+                stack.push(root);
+                root = root.right;
             }
-            Spy top = stack.peek();
-            if (!top.isRightVisited && top.node.right != null) {
-                top.isRightVisited = true;
-                root = top.node.right;
-            } else {
-                ret.add(top.node.val);
-                stack.pop();
-            }
+            TreeNode top = stack.pop();
+            root = top.left;
         }
+        Collections.reverse(ret);
         return ret;
     }
 
