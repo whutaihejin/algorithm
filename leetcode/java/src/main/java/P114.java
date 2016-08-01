@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -27,6 +28,26 @@ public class P114 {
         root.right = next;
         root.left = null;
         next = root;
+    }
+
+    public void convert(TreeNode root, TreeNode[] prev) {
+        if (root == null) return;
+        convert(root.left, prev);
+        if (prev[0] != null) {
+            prev[0].right = root;
+        }
+        root.left = prev[0];
+        prev[0] = root;
+        convert(root.right, prev);
+    }
+
+    public TreeNode BST2DL(TreeNode root) {
+        if (root == null) return root;
+        convert(root, new TreeNode[] {null});
+        while (root.left != null) {
+            root = root.left;
+        }
+        return root;
     }
 
     @Test
@@ -77,6 +98,22 @@ public class P114 {
         TreeNode n3 = new TreeNode(3, n6, n7);
         TreeNode root = new TreeNode(1, n2, n3);
         flatten(root);
+    }
+
+    @Test
+    public void test5() {
+        //     1
+        //  2      3
+        //4   5  6   7
+        TreeNode n4 = new TreeNode(4);
+        TreeNode n5 = new TreeNode(5);
+        TreeNode n2 = new TreeNode(2, n4, n5);
+        TreeNode n6 = new TreeNode(6);
+        TreeNode n7 = new TreeNode(7);
+        TreeNode n3 = new TreeNode(3, n6, n7);
+        TreeNode root = new TreeNode(1, n2, n3);
+        TreeNode head = BST2DL(root);
+        Assert.assertEquals(4, head.val);
     }
 
 
