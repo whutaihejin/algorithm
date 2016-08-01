@@ -1,9 +1,7 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by taihejin on 16-8-1.
@@ -24,16 +22,33 @@ public class P145 {
         }
     }
 
-    private void postorderTraversalHelper(TreeNode root, List<Integer> ret) {
-        if (root == null) return;
-        postorderTraversalHelper(root.left, ret);
-        postorderTraversalHelper(root.right, ret);
-        ret.add(root.val);
+    private static class Spy {
+        TreeNode node;
+        Boolean isRightVisited;
+        Spy(TreeNode node, Boolean isRightVisited) {
+            this.node = node;
+            this.isRightVisited = isRightVisited;
+        }
     }
 
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> ret = new ArrayList<Integer>();
-        postorderTraversalHelper(root, ret);
+        if (root == null) return ret;
+        Deque<Spy> stack = new ArrayDeque<Spy>();
+        while (root != null || !stack.isEmpty()) {
+            while (root != null) {
+                stack.push(new Spy(root, false));
+                root = root.left;
+            }
+            Spy top = stack.pop();
+            if (!top.isRightVisited && top.node.right != null) {
+                top.isRightVisited = true;
+                stack.push(top);
+                root = top.node.right;
+            } else {
+                ret.add(top.node.val);
+            }
+        }
         return ret;
     }
 
@@ -78,6 +93,22 @@ public class P145 {
         TreeNode root = new TreeNode(1, left, right);
         List<Integer> ret = postorderTraversal(root);
         Assert.assertEquals("[2, 3, 1]", Arrays.toString(ret.toArray()));
+    }
+
+    @Test
+    public void test5() {
+        //       1
+        //   2       3
+        // 4   5   6   7
+        TreeNode n4 = new TreeNode(4);
+        TreeNode n5 = new TreeNode(5);
+        TreeNode n6 = new TreeNode(6);
+        TreeNode n7 = new TreeNode(7);
+        TreeNode n2 = new TreeNode(2, n4, n5);
+        TreeNode n3 = new TreeNode(3, n6, n7);
+        TreeNode root = new TreeNode(1, n2, n3);
+        List<Integer> ret = postorderTraversal(root);
+        Assert.assertEquals("[4, 5, 2, 6, 7, 3, 1]", Arrays.toString(ret.toArray()));
     }
 
 }
