@@ -40,13 +40,13 @@ public class P145 {
                 stack.push(new Spy(root, false));
                 root = root.left;
             }
-            Spy top = stack.pop();
+            Spy top = stack.peek();
             if (!top.isRightVisited && top.node.right != null) {
                 top.isRightVisited = true;
-                stack.push(top);
                 root = top.node.right;
             } else {
                 ret.add(top.node.val);
+                stack.pop();
             }
         }
         return ret;
