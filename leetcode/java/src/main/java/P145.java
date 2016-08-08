@@ -27,7 +27,7 @@ public class P145 {
 
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> ret = new ArrayList<Integer>();
-        if (root == null) return ret;\
+        if (root == null) return ret;
         Deque<TreeNode> stack = new ArrayDeque<TreeNode>();
         while (root != null || !stack.isEmpty()) {
             while (root != null) {
