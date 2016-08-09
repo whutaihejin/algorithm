@@ -15,27 +15,21 @@ public class P132 {
         return true;
     }
 
-    // Time Limit Exceeded
     public int minCut(String s) {
-        if (s.isEmpty()) return 0;
         int size = s.length();
-        int[][] matrix = new int[size][size];
-        for (int k = 0; k < size; k++) {
-            matrix[k][k] = 0;
+        int[] cut = new int[size + 1];
+        for (int i = 0; i <= size; i++) {
+            cut[i] = i - 1;
         }
-        for (int len = 2; len <= size; len++) {
-            for (int i = 0; i <= size - len; i++) {
-                int limit = i + len - 1;
-                if (!isPalindrome(s, i, limit)) {
-                    int minCut = Integer.MAX_VALUE;
-                    for (int k = i; k < limit; k++) {
-                        minCut = Math.min(minCut, matrix[i][k] + matrix[k + 1][limit] + 1);
-                    }
-                    matrix[i][limit] = minCut;
-                }
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; i - j >= 0 && i + j < size && s.charAt(i - j) == s.charAt(i + j); j++) {
+                cut[i + j + 1] = Math.min(cut[i + j + 1], cut[i - j] + 1);
+            }
+            for (int j = 1; i - j + 1 >= 0 && i + j < size && s.charAt(i - j + 1) == s.charAt(i + j); j++) {
+                cut[i + j + 1] = Math.min(cut[i + j + 1], cut[i - j + 1] + 1);
             }
         }
-        return matrix[0][size - 1];
+        return cut[size];
     }
 
     @Test
@@ -54,7 +48,7 @@ public class P132 {
 
     @Test
     public void test2() {
-        Assert.assertEquals(0, minCut(""));
+        Assert.assertEquals(-1, minCut(""));
         Assert.assertEquals(0, minCut("a"));
         Assert.assertEquals(0, minCut("aa"));
     }
