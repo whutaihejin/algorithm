@@ -22,24 +22,19 @@ public class P138 {
         }
     }
 
-    public RandomListNode copyRandomList(RandomListNode head) {
+    public RandomListNode copyRandomListHelper(RandomListNode head, Map<RandomListNode, RandomListNode> map) {
         if (head == null) return head;
-        Map<RandomListNode, RandomListNode> hash = new HashMap<RandomListNode, RandomListNode>();
-        RandomListNode p = head;
-        while (p != null) {
-            RandomListNode copy = new RandomListNode(p.label);
-            copy.next = p.next;
-            copy.random = p.random;
-            hash.put(p, copy);
-            p = p.next;
-        }
-        p = hash.get(head);
-        while (p != null) {
-            p.next = hash.get(p.next);
-            p.random = hash.get(p.random);
-            p = p.next;
-        }
-        return hash.get(head);
+        if (map.containsKey(head)) return map.get(head);
+        RandomListNode copy = new RandomListNode(head.label);
+        map.put(head, copy);
+        copy.next = copyRandomListHelper(head.next, map);
+        copy.random = copyRandomListHelper(head.random, map);
+        return copy;
+    }
+
+    public RandomListNode copyRandomList(RandomListNode head) {
+        Map<RandomListNode, RandomListNode> map = new HashMap<RandomListNode, RandomListNode>();
+        return copyRandomListHelper(head, map);
     }
 
     @Test
