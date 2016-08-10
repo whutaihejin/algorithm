@@ -34,23 +34,87 @@ public class P143 {
         }
     }
 
-    public ListNode reorderListHelper(ListNode head, ListNode[] dummy) {
-        if (head.next == null) return head;
-        ListNode node = reorderListHelper(head.next, dummy);
-        if (dummy[0] == node || dummy[0].next == node) {
-            node.next = null;
-            return node;
+    private ListNode findMiddle(ListNode head) {
+        ListNode follow = head;
+        ListNode forward = head.next;
+        while (forward != null && forward.next != null) {
+            forward = forward.next.next;
+            follow = follow.next;
         }
-        ListNode next = dummy[0].next;
-        node.next = dummy[0].next;
-        dummy[0].next = node;
-        dummy[0] = next;
-        return head;
+        return follow;
+    }
+
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
     }
 
     public void reorderList(ListNode head) {
         if (head == null || head.next == null) return;
-        reorderListHelper(head, new ListNode[]{head});
+        ListNode tail = findMiddle(head);
+        ListNode l1 = head;
+        ListNode l2 = tail.next;
+        tail.next = null;
+        l2 = reverse(l2);
+        while (l2 != null) {
+            ListNode next1 = l1.next;
+            ListNode next2 = l2.next;
+            l2.next = l1.next;
+            l1.next = l2;
+            l2 = next2;
+            l1 = next1;
+        }
+    }
+
+    @Test
+    public void testfindMiddle0() {
+        ListNode n2 = new ListNode(2);
+        ListNode n1 = new ListNode(1, n2);
+        Assert.assertEquals("1->2", n1.build());
+        Assert.assertEquals(n1, findMiddle(n1));
+        ListNode l1 = reverse(n1);
+        Assert.assertEquals("2->1", l1.build());
+    }
+
+    @Test
+    public void testFindMiddle1() {
+        ListNode n3 = new ListNode(3);
+        ListNode n2 = new ListNode(2, n3);
+        ListNode n1 = new ListNode(1, n2);
+        Assert.assertEquals("1->2->3", n1.build());
+        Assert.assertEquals(n2, findMiddle(n1));
+        ListNode l1 = reverse(n1);
+        Assert.assertEquals("3->2->1", l1.build());
+    }
+
+    @Test
+    public void testFindMiddle2() {
+        ListNode n4 = new ListNode(4);
+        ListNode n3 = new ListNode(3, n4);
+        ListNode n2 = new ListNode(2, n3);
+        ListNode n1 = new ListNode(1, n2);
+        Assert.assertEquals("1->2->3->4", n1.build());
+        Assert.assertEquals(n2, findMiddle(n1));
+        ListNode l1 = reverse(n1);
+        Assert.assertEquals("4->3->2->1", l1.build());
+    }
+
+    @Test
+    public void testFindMiddle3() {
+        ListNode n5 = new ListNode(5);
+        ListNode n4 = new ListNode(4, n5);
+        ListNode n3 = new ListNode(3, n4);
+        ListNode n2 = new ListNode(2, n3);
+        ListNode n1 = new ListNode(1, n2);
+        Assert.assertEquals("1->2->3->4->5", n1.build());
+        Assert.assertEquals(n3, findMiddle(n1));
     }
 
     @Test
