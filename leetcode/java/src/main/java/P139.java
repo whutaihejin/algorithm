@@ -21,26 +21,17 @@ public class P139 {
     }
 
     public boolean wordBreak(String s, Set<String> wordDict) {
-        if (s.isEmpty()) return wordDict.contains(s);
-        int size = s.length();
-        boolean[][] matrix = new boolean[size][size];
-        for (int i = 0; i < size; i++) {
-            matrix[i][i] = wordDict.contains(s.substring(i, i + 1)) ? true : false;
-        }
-        for (int len = 2; len <= size; len++) {
-            for (int i = 0; i <= size - len; i++) {
-                if (wordDict.contains(s.substring(i, i + len))) {
-                    matrix[i][i + len - 1] = true;
-                    continue;
-                }
-                for (int k = i; k < i + len - 1; k++) {
-                    if (matrix[i][k] && matrix[k + 1][i + len - 1]) {
-                        matrix[i][i + len - 1] = true;
-                    }
+        boolean[] status = new boolean[s.length() + 1];
+        status[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int k = 0; k < i; k++) {
+                if (status[k] && wordDict.contains(s.substring(k, i))) {
+                    status[i] = true;
+                    break;
                 }
             }
         }
-        return matrix[0][size - 1];
+        return status[s.length()];
     }
 
     @Test
@@ -65,7 +56,7 @@ public class P139 {
     @Test
     public void test1() {
         Set<String> wordDict = new HashSet<String>(Arrays.asList("leet", "code"));
-        Assert.assertEquals(false, wordBreak("", wordDict));
+        Assert.assertEquals(true, wordBreak("", wordDict));
         Assert.assertEquals(false, wordBreak("whu", wordDict));
     }
 
