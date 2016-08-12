@@ -4,11 +4,12 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 public class P128 {
 
-    public int longestConsecutive(int[] nums) {
+    public int longestConsecutiveHashSet(int[] nums) {
         if (nums.length <= 1) return nums.length;
         Set<Integer> set = new HashSet<Integer>();
         for (int num : nums) {
@@ -23,6 +24,27 @@ public class P128 {
                 }
                 longest = Math.max(longest, x - num);
             }
+        }
+        return longest;
+    }
+
+    public int longestConsecutive(int[] nums) {
+        if (nums.length <= 1) return nums.length;
+        Arrays.sort(nums);
+        int longest = 0;
+        for (int i = 0; i < nums.length;) {
+            int j = i + 1;
+            int repetition = 0;
+            while (j < nums.length) {
+                if (nums[j] == nums[j - 1]) {
+                    repetition++;
+                } else if (nums[j] - 1 != nums[j - 1]) {
+                    break;
+                }
+                j++;
+            }
+            longest = Math.max(longest, j - i - repetition);
+            i = j;
         }
         return longest;
     }
@@ -45,5 +67,12 @@ public class P128 {
     public void test2() {
         Assert.assertEquals(1, longestConsecutive(new int[]{1, 1}));
         Assert.assertEquals(2, longestConsecutive(new int[]{1, 1, 2}));
+    }
+
+    @Test
+    public void test3() {
+        Assert.assertEquals(3, longestConsecutive(new int[]{1, 2, 0, 1}));
+        Assert.assertEquals(3, longestConsecutive(new int[]{1, 2, 0, 0, 0, 1}));
+        Assert.assertEquals(4, longestConsecutive(new int[]{1, 2, 0, 0, 0, 1, 3}));
     }
 }
