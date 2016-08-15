@@ -12,18 +12,6 @@ import java.util.Arrays;
 
 public class P127 {
 
-
-
-    private boolean reachable(String prev, String curr) {
-        int diff = 0;
-        for (int i = 0; i < prev.length() && diff <= 1; i++) {
-            if (prev.charAt(i) != curr.charAt(i)) {
-                diff++;
-            }
-        }
-        return diff == 1 ? true : false;
-    }
-
     private static final String nil = "NIL";
 
     public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
@@ -60,15 +48,6 @@ public class P127 {
             }
         }
         return flag ? level : 0;
-    }
-
-    @Test
-    public void test0() {
-        Assert.assertEquals(true, reachable("hit", "hot"));
-        Assert.assertEquals(true, reachable("hit", "hio"));
-        Assert.assertEquals(false, reachable("hit", "dot"));
-        Assert.assertEquals(false, reachable("hit_me", "dot_me"));
-        Assert.assertEquals(false, reachable("hit", "hit"));
     }
 
     @Test
