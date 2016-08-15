@@ -68,8 +68,8 @@ public class P143 {
             ListNode next2 = l2.next;
             l2.next = l1.next;
             l1.next = l2;
-            l2 = next2;
             l1 = next1;
+            l2 = next2;
         }
     }
 
