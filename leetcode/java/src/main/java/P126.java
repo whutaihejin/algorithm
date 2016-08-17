@@ -43,7 +43,7 @@ public class P126 {
         int curr = 0; int prev = 1;
         level.get(curr).add(beginWord);
         boolean flag = false;
-        while (!level.get(curr).isEmpty()) {
+        while (!level.get(curr).isEmpty() && !flag) {
             curr = 1 - curr;
             prev = 1 - prev;
             level.get(curr).clear();
