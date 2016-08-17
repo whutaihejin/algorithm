@@ -5,49 +5,43 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Set;
-import java.util.Deque;
-import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Arrays;
 
 public class P127 {
 
-    private static final String nil = "NIL";
-
     public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+        wordList.add(beginWord);
         wordList.add(endWord);
-        Deque<String> queue = new ArrayDeque<String>();
-        queue.offer(beginWord);
-        queue.offer(nil);
-        int level = 1;
+        HashSet<String>[] level = new HashSet[]{new HashSet(), new HashSet()};
+        int curr = 0, prev = 1, shortLevel = 0;
+        level[curr].add(beginWord);
         boolean flag = false;
-        while (!queue.isEmpty()) {
-            String word = queue.poll();
-            char[] buf = word.toCharArray();
-            if (word != nil) {
-                if (word.equals(endWord)) {
-                    flag = true;
-                    break;
+        while (!level[curr].isEmpty() && !flag) {
+            curr = 1 - curr;
+            prev = 1 - prev;
+            for (String x : level[prev]) {
+                if (x.equals(endWord)) {
+                    flag = true; break;
                 }
+                char[] buf = x.toCharArray();
                 for (int i = 0; i < buf.length; i++) {
                     char ch = buf[i];
                     for (char k = 'a'; k <= 'z'; k++) {
                         if (ch == k) continue;
                         buf[i] = k;
                         String adjacent = new String(buf);
-                        if (wordList.contains(adjacent)) {
-                            queue.offer(adjacent);
-                            wordList.remove(adjacent);
+                        if (wordList.contains(adjacent) && !level[prev].contains(adjacent)) {
+                            level[curr].add(adjacent);
                         }
                     }
                     buf[i] = ch;
                 }
-            } else if (!queue.isEmpty()) {
-                level++;
-                queue.offer(nil);
+                wordList.remove(x);
             }
+            shortLevel++;
         }
-        return flag ? level : 0;
+        return flag ? shortLevel : 0;
     }
 
     @Test
