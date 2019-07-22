@@ -96,4 +96,34 @@ public class Problem30T60Test {
             System.out.println(l.toString());
         }
     }
+
+    @Test
+    public void permuteUniqueTest() {
+        List<List<Integer>> rst = solution.permuteUnique(new int[]{1, 1, 2, 2});
+        Assert.assertEquals(6, rst.size());
+        System.out.println("========");
+        for (List<Integer> l : rst) {
+            System.out.println(l.toString());
+        }
+    }
+
+    @Test
+    public void permuteUniqueTest2() {
+        List<List<Integer>> rst = solution.permuteUnique(new int[]{1, 1, 2});
+        Assert.assertEquals(3, rst.size());
+        System.out.println("========");
+        for (List<Integer> l : rst) {
+            System.out.println(l.toString());
+        }
+    }
+
+    @Test
+    public void permuteUniqueTest3() {
+        List<List<Integer>> rst = solution.permuteUnique(new int[]{1, 2, 3});
+        Assert.assertEquals(6, rst.size());
+        System.out.println("========");
+        for (List<Integer> l : rst) {
+            System.out.println(l.toString());
+        }
+    }
 }

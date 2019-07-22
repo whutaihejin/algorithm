@@ -299,13 +299,28 @@ public class Problem30T60 {
     // 47. Permutations II
     public List<List<Integer>> permuteUnique(int[] nums) {
         Arrays.sort(nums);
+        boolean[] used = new boolean[nums.length];
         List<List<Integer>> rst = new ArrayList<>();
-        DoPermuteUnique(nums, new ArrayList<>(), rst);
+        DoPermuteUnique(nums, used, new ArrayList<>(), rst);
         return rst;
     }
 
-    private void DoPermuteUnique(int[] nums, List<Integer> path, List<List<Integer>> rst) {
-        
+    private void DoPermuteUnique(int[] nums, boolean[] used,
+                                 List<Integer> path, List<List<Integer>> rst) {
+        if (path.size() == nums.length) rst.add(new ArrayList<>(path));
+        else {
+            for (int i = 0; i < nums.length;) {
+                if (used[i]) { i++; continue;}
+                int k = i; // next i
+                while (k < nums.length && nums[k] == nums[i]) k++;
+                path.add(nums[i]);
+                used[i] = true;
+                DoPermuteUnique(nums, used, path, rst);
+                path.remove(path.size() - 1);
+                used[i] = false;
+                i = k;
+            }
+        }
     }
 
 
