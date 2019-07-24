@@ -20,7 +20,7 @@ public class P45 {
             }
             curr = Math.max(curr, i + nums[i]);
         }
-       return ret;
+        return ret;
     }
 
     @Test

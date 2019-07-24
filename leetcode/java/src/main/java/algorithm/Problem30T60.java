@@ -277,6 +277,119 @@ public class Problem30T60 {
         }
     }
 
+
+    // 41. First Missing Positive
+    public int firstMissingPositive(int[] nums) {
+        for (int i = 0; i < nums.length;) {
+            if (nums[i] >= 1 && nums[i] <= nums.length && nums[nums[i] - 1] != nums[i]) {
+                swap(nums, i, nums[i] - 1);
+            } else {
+                i++;
+            }
+        }
+        for (int i = 0; i < nums.length; ++i) {
+            if (nums[i] != i + 1) return i + 1;
+        }
+        return nums.length + 1;
+    }
+
+    // 42. Trapping Rain Water
+    public int trap(int[] height) {
+        int water = 0;
+        int l = 0, h = height.length - 1;
+        while (l < h) {
+            if (height[l] <= height[h]) {
+                int k = l + 1;
+                while (k < h && height[k] < height[l]) {
+                    water += height[l] - height[k];
+                    k++;
+                }
+                l = k;
+            } else {
+                int k = h - 1;
+                while (l < k && height[k] < height[h]) {
+                    water += height[h] - height[k];
+                    k--;
+                }
+                h = k;
+            }
+        }
+        return water;
+    }
+
+    // 43. Multiply Strings
+    public String multiply(String num1, String num2) {
+        int m = num1.length(), n = num2.length();
+        int[] digit = new int[m + n];
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                int v = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+                digit[i + j] += v / 10;
+                digit[i + j + 1] += v % 10;
+            }
+        }
+        int carry = 0;
+        for (int k = m + n - 1; k >= 0; --k) {
+            int v = digit[k] + carry;
+            digit[k] = v % 10;
+            carry = v / 10;
+        }
+        boolean pick = false;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < m + n; ++i) {
+            if (digit[i] != 0) pick = true;
+            if (pick) builder.append(digit[i]);
+        }
+        if (builder.length() == 0) builder.append('0');
+        return builder.toString();
+    }
+
+    // 44. Wildcard Matching
+    public boolean isMatch(String s, String p) {
+        int m = s.length(), n = p.length();
+        boolean[][] f = new boolean[m + 1][n + 1];
+        for (int i = 0; i <= m; ++i) {
+            f[i][0] = i == 0;
+        }
+        for (int j = 1; j <= n; ++j) {
+            f[0][j] = p.charAt(j - 1) == '*' ? f[0][j - 1] : false;
+        }
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                char c = p.charAt(j - 1);
+                switch (c) {
+                    case '*':
+                        // case 1: * match zero character
+                        // case 2: * match only one character
+                        // case 3: * erase one character and match the rest of text
+                        f[i][j] = f[i][j - 1] || f[i - 1][j - 1] || f[i - 1][j];
+                        break;
+                    case '?':
+                        f[i][j] = f[i - 1][j - 1];
+                        break;
+                    default:
+                        f[i][j] = s.charAt(i - 1) == p.charAt(j - 1) && f[i - 1][j - 1];
+                        break;
+                }
+            }
+        }
+        return f[m][n];
+    }
+
+    // 45. Jump Game II
+    public int jump(int[] nums) {
+        int step = 0;
+        int far = 0, limit = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            if (i > limit) {
+                limit = far;
+                step++;
+            }
+            far = Math.max(far, nums[i] + i);
+        }
+        return step;
+    }
+
     // 46. Permutations
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> rst = new ArrayList<>();
@@ -323,6 +436,283 @@ public class Problem30T60 {
         }
     }
 
+    // 48. Rotate Image
+    public void rotate(int[][] matrix) {
+        if (matrix.length <= 0 || matrix[0].length <= 0) return;
+        int n = matrix.length;
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                int v = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = v;
+            }
+        }
+        // reverse with column
+        for (int l = 0, h = n - 1; l < h; ++l, --h) {
+            for (int i = 0; i < n; ++i) {
+                swap(matrix[i], l, h);
+            }
+        }
+    }
 
+    // 49. Group Anagrams
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> rst = new ArrayList<>();
+        Map<String, List<String>> map = new HashMap();
+        for (int i = 0; i < strs.length; ++i) {
+            char[] arr = strs[i].toCharArray();
+            Arrays.sort(arr);
+            String key = new String(arr);
+            if (map.containsKey(key)) {
+                map.get(key).add(strs[i]);
+            } else {
+                List<String> list = new ArrayList<>();
+                list.add(strs[i]);
+                map.put(key, list);
+            }
+        }
+        for (List<String> l : map.values()) {
+            rst.add(l);
+        }
+        return rst;
+    }
+
+    // 50. Pow(x, n)
+    public double myPow(double x, int n) {
+        if (n == 0) return 1.0;
+        else if (n == 1) return x;
+        else {
+            double v = myPow(x, n / 2);
+            double delta = n < 0 ? 1 / x : x;
+            return ((n & 0x01) == 1) ? v * v * delta : v * v;
+        }
+    }
+
+    private boolean isValid(char[][] board, int x, int y) {
+        int n = board.length;
+        for (int k = x - 1; k >= 0; --k) {
+            if (board[k][y] == 'Q') return false;
+        }
+        int i = x - 1, j = y - 1;
+        while (i >= 0 && j >= 0) {
+            if (board[i][j] == 'Q') return false;
+            i--; j--;
+        }
+        i = x - 1; j = y + 1;
+        while (i >= 0 && i < n && j >= 0 && j < n) {
+            if (board[i][j] == 'Q') return false;
+            i--; j++;
+        }
+        return true;
+    }
+
+    private void DoSolveNQueens(char[][] board, int i, List<List<String>> rst) {
+        if (i >= board.length) {
+            List<String> chess = new ArrayList<>();
+            for (int k = 0; k < board.length; ++k) {
+                chess.add(new String(board[k]));
+            }
+            rst.add(chess);
+        } else {
+            for (int k = 0; k < board.length; ++k) {
+                board[i][k] = 'Q';
+                if (isValid(board, i, k)) {
+                    DoSolveNQueens(board, i + 1, rst);
+                }
+                board[i][k] = '.';
+            }
+        }
+    }
+
+    // 51. N-Queens
+    public List<List<String>> solveNQueens(int n) {
+        char[][] board = new char[n][n];
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                board[i][j] = '.';
+            }
+        }
+        List<List<String>> rst = new ArrayList<>();
+        DoSolveNQueens(board, 0, rst);
+        return rst;
+    }
+
+    // 52. N-Queens II
+    public int totalNQueens(int n) {
+        char[][] board = new char[n][n];
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                board[i][j] = '.';
+            }
+        }
+        return DoTotalNQueens(board, 0);
+    }
+
+    private int DoTotalNQueens(char[][] board, int i) {
+        if (i >= board.length) return 1;
+        else {
+            int v = 0;
+            for (int k = 0; k < board.length; ++k) {
+                board[i][k] = 'Q';
+                if (isValid(board, i, k)) {
+                    v += DoTotalNQueens(board, i + 1);
+                }
+                board[i][k] = '.';
+            }
+            return v;
+        }
+    }
+
+    // 53. Maximum Subarray
+    public int maxSubArray(int[] nums) {
+        int mx = nums[0], end = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            end = end <= 0 ? nums[i] : end + nums[i];
+            mx = Math.max(mx, end);
+        }
+        return mx;
+    }
+
+    // 54. Spiral Matrix
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> rst = new ArrayList<>();
+        if (matrix.length <= 0 || matrix[0].length <= 0) return rst;
+        int i = 0, j = 0;
+        int li = 0, hi = matrix.length - 1;
+        int lj = 0, hj = matrix[0].length - 1;
+        while (li <= hi && lj <= hj) {
+            while (i >= li && i <= hi && j >= lj && j <= hj) {
+                rst.add(matrix[i][j]);
+                j++;
+            }
+            i++; j--;
+            li++; // shrink top row
+            while (i >= li && i <= hi && j >= lj && j <= hj) {
+                rst.add(matrix[i][j]);
+                i++;
+            }
+            i--; j--;
+            hj--;
+            while (i >= li && i <= hi && j >= lj && j <= hj) {
+                rst.add(matrix[i][j]);
+                j--;
+            }
+            i--; j++;
+            hi--;
+            while (i >= li && i <= hi && j >= lj && j <= hj) {
+                rst.add(matrix[i][j]);
+                i--;
+            }
+            i++; j++;
+            lj++;
+        }
+        return rst;
+    }
+
+    // 55. Jump Game
+    public boolean canJump(int[] nums) {
+        int far = 0, limit = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            if (i > limit) {
+                limit = far;
+                if (far < i) return false;
+            }
+            far = Math.max(far, nums[i] + i);
+        }
+        return limit >= nums.length - 1;
+    }
+
+    public class MergeComparator implements Comparator<int[]> {
+        @Override
+        public int compare(int[] x, int[] y) {
+            return x[0] - y[0];
+        }
+    }
+
+    // 56. Merge Intervals
+    public int[][] merge(int[][] intervals) {
+        List<int[]> rst = new ArrayList<>();
+        if (intervals.length <= 0) return rst.toArray(new int[0][2]);
+        // sort intervals
+        Arrays.sort(intervals, new MergeComparator());
+        int[] base = intervals[0];
+        for (int i = 1; i < intervals.length; ++i) {
+            if (intervals[i][0] <= base[1]) {
+                base[1] = Math.max(base[1], intervals[i][1]);
+            } else {
+                rst.add(new int[]{base[0], base[1]});
+                base = intervals[i];
+            }
+        }
+        rst.add(base);
+        int[][] r = new int[rst.size()][2];
+        return rst.toArray(r);
+    }
+
+    // 57. Insert Interval
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> rst = new ArrayList<>();
+        int i = 0;
+        for (; i < intervals.length && intervals[i][1] < newInterval[0]; ++i) {
+            rst.add(intervals[i]);
+        }
+        for (; i < intervals.length && intervals[i][0] <= newInterval[1]; ++i) {
+            newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+            newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+        }
+        rst.add(newInterval);
+        for (; i < intervals.length; ++i) {
+            rst.add(intervals[i]);
+        }
+        return rst.toArray(new int[rst.size()][2]);
+    }
+
+    // 58. Length of Last Word
+    public int lengthOfLastWord(String s) {
+        for (int h = s.length() - 1; h >= 0; --h) {
+            if (s.charAt(h) != ' ') {
+                int l = h - 1;
+                while (l >= 0 && s.charAt(l) != ' ') l--;
+                return h - l;
+            }
+        }
+        return 0;
+    }
+
+    // 59. Spiral Matrix II
+    public int[][] generateMatrix(int n) {
+        int[][] matrix = new int[n][n];
+        if (n <= 0) return matrix;
+        int i = 0, j = 0, k = 0;
+        int li = 0, hi = matrix.length - 1;
+        int lj = 0, hj = matrix[0].length - 1;
+        while (li <= hi && lj <= hj) {
+            while (i >= li && i <= hi && j >= lj && j <= hj) {
+                matrix[i][j] = ++k;
+                j++;
+            }
+            i++; j--;
+            li++; // shrink top row
+            while (i >= li && i <= hi && j >= lj && j <= hj) {
+                matrix[i][j] = ++k;
+                i++;
+            }
+            i--; j--;
+            hj--;
+            while (i >= li && i <= hi && j >= lj && j <= hj) {
+                matrix[i][j] = ++k;
+                j--;
+            }
+            i--; j++;
+            hi--;
+            while (i >= li && i <= hi && j >= lj && j <= hj) {
+                matrix[i][j] = ++k;
+                i--;
+            }
+            i++; j++;
+            lj++;
+        }
+        return matrix;
+    }
 
 }

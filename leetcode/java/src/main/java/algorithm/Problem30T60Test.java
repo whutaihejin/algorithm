@@ -126,4 +126,98 @@ public class Problem30T60Test {
             System.out.println(l.toString());
         }
     }
+
+    @Test
+    public void firstMissingPositiveTest() {
+        Assert.assertEquals(4, solution.firstMissingPositive(new int[]{1, 2, 3}));
+        Assert.assertEquals(2, solution.firstMissingPositive(new int[]{1, 5, 3}));
+        Assert.assertEquals(1, solution.firstMissingPositive(new int[]{10, 5, 3}));
+    }
+
+    @Test
+    public void trapTest() {
+        int[] height = new int[]{0,1,0,2,1,0,1,3,2,1,2,1};
+        Assert.assertEquals(6, solution.trap(height));
+    }
+
+    @Test
+    public void multiplyTest() {
+        Assert.assertEquals("56088", solution.multiply("123", "456"));
+        Assert.assertEquals("0", solution.multiply("", "456"));
+        Assert.assertEquals("0", solution.multiply("123", ""));
+        Assert.assertEquals("0", solution.multiply("123", "0"));
+        Assert.assertEquals("0", solution.multiply("0", "123"));
+        Assert.assertEquals("0", solution.multiply("0", "0"));
+        Assert.assertEquals("0", solution.multiply("", ""));
+    }
+
+    @Test
+    public void isMatchTest() {
+        Assert.assertEquals(false, solution.isMatch("aa", "a"));
+        Assert.assertEquals(true, solution.isMatch("aa", "*"));
+        Assert.assertEquals(false, solution.isMatch("cb", "?a"));
+        Assert.assertEquals(true, solution.isMatch("adceb", "*a*b"));
+        Assert.assertEquals(false, solution.isMatch("acdcb", "a*c?b"));
+    }
+
+    @Test
+    public void jumpTest() {
+        Assert.assertEquals(2, solution.jump(new int[]{2, 3, 1, 1, 4}));
+    }
+
+    @Test
+    public void rotateTest() {
+        int[][] matrix = new int[][] {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        };
+        solution.rotate(matrix);
+    }
+
+    @Test
+    public void myPowTest() {
+        Assert.assertEquals(0.25, solution.myPow(2, -2), 0.0001);
+    }
+
+    @Test
+    public void solveNQueensTest() {
+        List<List<String>> rst = solution.solveNQueens(4);
+        Assert.assertEquals(2, rst.size());
+        for (List<String> list : rst) {
+            System.out.println("==========");
+            for (String s : list) {
+                System.out.println(s);
+            }
+        }
+    }
+
+    @Test
+    public void solveNQueensTest1() {
+        List<List<String>> rst = solution.solveNQueens(5);
+        // Assert.assertEquals(2, rst.size());
+        for (List<String> list : rst) {
+            System.out.println("==========");
+            for (String s : list) {
+                System.out.println(s);
+            }
+        }
+    }
+
+    @Test
+    public void totalNQueensTest() {
+        Assert.assertEquals(2, solution.totalNQueens(4));
+    }
+
+    @Test
+    public void maxSubArrayTest() {
+        int[] nums = new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        Assert.assertEquals(6, solution.maxSubArray(nums));
+    }
+
+    @Test
+    public void canJumpTest() {
+        int[] nums = new int[]{3,2,1,0,4,1};
+        Assert.assertEquals(false, solution.canJump(nums));
+    }
 }
