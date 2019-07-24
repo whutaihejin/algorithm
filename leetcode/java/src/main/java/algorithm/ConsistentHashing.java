@@ -71,34 +71,45 @@ public class ConsistentHashing {
 
     //
     public static class ConsistentHashingCluster implements Cluster {
-        private static final int CLUSTER_SIZE = 1024;
-
-        private SortedMap<Integer, Server> servers = new TreeMap<>();
-        private int capacity = 0;
+        private SortedMap<Integer, Server> circles = new TreeMap<>();
+        private int replicas = 10;
 
         private Server route(int hash) {
-            if (!servers.containsKey(hash)) {
-                SortedMap<Integer, Server> tail = servers.tailMap(hash);
-                hash = tail.isEmpty() ? servers.firstKey() : tail.firstKey();
+            if (!circles.containsKey(hash)) {
+                SortedMap<Integer, Server> tail = circles.tailMap(hash);
+                hash = tail.isEmpty() ? circles.firstKey() : tail.firstKey();
             }
-            return servers.get(hash);
+            return circles.get(hash);
         }
 
         public Entry get(Entry e) {
-            if (capacity <= 0) return null;
-            return route(e.hashCode()).get(e);
+            if (circles.isEmpty()) return null;
+            Server server = route(e.hashCode());
+            return server.get(e);
         }
 
         public boolean put(Entry entry) {
-            if (capacity <= 0) return false;
-            route(entry.hashCode()).put(entry);
+            if (circles.isEmpty()) return false;
+            Server server = route(entry.hashCode());
+            server.put(entry);
             return true;
         }
 
         public boolean addServer(Server s) {
-            if (capacity >= CLUSTER_SIZE) return false;
-            servers.put(s.hashCode(), s);
-            capacity++;
+            for (int i = 1; i <= replicas; ++i) {
+                String val = s.toString() + i;
+                int point = Math.abs(val.hashCode());
+                circles.put(point, s);
+            }
+            return true;
+        }
+
+        public boolean removeServer(Server s) {
+            for (int i = 1; i <= replicas; ++i) {
+                String val = s.toString() + i;
+                int point = Math.abs(val.hashCode());
+                circles.remove(point);
+            }
             return true;
         }
     }
