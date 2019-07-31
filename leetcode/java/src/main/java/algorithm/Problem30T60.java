@@ -715,4 +715,144 @@ public class Problem30T60 {
         return matrix;
     }
 
+    // 60. Permutation Sequence
+    public String getPermutation(int n, int k) {
+        int total = 1;
+        int[] nums = new int[n];
+        for (int i = 0; i < n; ++i) {
+            nums[i] = i + 1;
+            total *= (i + 1);
+        }
+        total /= n;
+        for (int i = 0; i < n - 1; ++i) {
+            int j = (k - 1) / total;
+            swap(nums, i, i + j);
+            Arrays.sort(nums, i + 1, nums.length);
+            k -= j * total;
+            total /= (n - 1 - i);
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < n; ++i) {
+            builder.append(nums[i]);
+        }
+        return builder.toString();
+    }
+
+    // 61. Rotate List
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null) return head;
+        ListNode p = head;
+        int len = 0;
+        while (p != null) {
+            len++;
+            p = p.next;
+        }
+        k = k % len;
+        if (k == 0) return head;
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        p = dummy;
+        for (int i = 0; i < len - k && p != null; ++k) {
+            p = p.next;
+        }
+        ListNode newHead = p.next;
+        p.next = null;
+        p = newHead;
+        while (p.next != null) {
+            p = p.next;
+        }
+        p.next = dummy.next;
+        return newHead;
+    }
+
+    // 62. Unique Paths
+    public int uniquePaths(int m, int n) {
+        if (m <= 0 || n <= 0) return 0;
+        int[][] f = new int[m][n];
+        for (int i = 0; i < m; ++i) {
+            f[i][0] = 1;
+        }
+        for (int j = 0; j < n; ++j) {
+            f[0][j] = 1;
+        }
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                f[i][j] = f[i - 1][j] + f[i][j - 1];
+            }
+        }
+        return f[m - 1][n - 1];
+    }
+
+    // 63. Unique Paths II
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        return 0;
+    }
+
+    // 94. Binary Tree Inorder Traversal
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> rst = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        while (!stack.empty() || root != null) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            TreeNode entry = stack.pop();
+            rst.add(entry.val);
+            root = entry.right;
+        }
+        return rst;
+    }
+
+    // 144. Binary Tree Preorder Traversal
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> rst = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        if (root != null) stack.push(root);
+        while (!stack.empty()) {
+            TreeNode entry = stack.pop();
+            rst.add(entry.val);
+            if (entry.right != null) stack.push(entry.right);
+            if (entry.left != null) stack.push(entry.left);
+        }
+        return rst;
+    }
+
+
+    // 145. Binary Tree Postorder Traversal
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> rst = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        if (root != null) stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode entry = stack.pop();
+            rst.add(entry.val);
+            if (entry.left != null) stack.push(entry.left);
+            if (entry.right != null) stack.push(entry.right);
+        }
+        int l = 0, h = rst.size() - 1;
+        while (l < h) {
+            int v = rst.get(l);
+            rst.set(l, rst.get(h));
+            rst.set(h, v);
+            l++; h--;
+        }
+        return rst;
+    }
+
+    // duplicate numbers
+    public int duplicate(int[] nums) {
+        for (int i = 0; i < nums.length;) {
+            if (nums[i] != i) {
+                if (nums[nums[i]] == nums[i]) {
+                    return nums[i];
+                }
+                swap(nums, i, nums[i]);
+            } else {
+                i++;
+            }
+        }
+        return -1;
+    }
+
 }

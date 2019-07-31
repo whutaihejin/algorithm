@@ -3,7 +3,10 @@ package algorithm;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public class Problem30T60Test {
 
@@ -219,5 +222,59 @@ public class Problem30T60Test {
     public void canJumpTest() {
         int[] nums = new int[]{3,2,1,0,4,1};
         Assert.assertEquals(false, solution.canJump(nums));
+    }
+
+    public int[] rightLarge(int[] nums) {
+        int[] large = new int[nums.length];
+        Arrays.fill(large, -1);
+        if (nums.length <= 0) return large;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < nums.length; ++i) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i]) {
+                large[stack.peek()] = nums[i];
+                stack.pop();
+            }
+            stack.push(i);
+        }
+        return large;
+    }
+
+    @Test
+    public void rightLargeTest() {
+        int[] nums = new int[]{3, 2, 5, 6, 1};
+        int[] large = rightLarge(nums);
+        for (int i : large) {
+            System.out.print(i + " ");
+        }
+        Assert.assertArrayEquals(new int[]{5, 5, 6, -1, -1}, large);
+    }
+
+    @Test
+    public void getPermutationTest() {
+        Assert.assertEquals("123", solution.getPermutation(3, 1));
+        Assert.assertEquals("132", solution.getPermutation(3, 2));
+        Assert.assertEquals("213", solution.getPermutation(3, 3));
+        Assert.assertEquals("231", solution.getPermutation(3, 4));
+        Assert.assertEquals("312", solution.getPermutation(3, 5));
+        Assert.assertEquals("321", solution.getPermutation(3, 6));
+        Assert.assertEquals("1", solution.getPermutation(1, 1));
+        Assert.assertEquals("12", solution.getPermutation(2, 1));
+        Assert.assertEquals("21", solution.getPermutation(2, 2));
+    }
+
+    @Test
+    public void rotateRightTest() {
+        ListNode head = ListNode.Generator(5);
+        Assert.assertEquals("1->2->3->4->5->NULL", head.toString());
+        System.out.println(head.toString());
+        ListNode h = solution.rotateRight(head, 2);
+        Assert.assertEquals("4->5->1->2->3->NULL", h.toString());
+    }
+
+    @Test
+    public void duplicateTest() {
+        int[] nums = new int[]{2,3,1,0,2,5,3};
+        int v = solution.duplicate(nums);
+        Assert.assertEquals(2, v);
     }
 }
