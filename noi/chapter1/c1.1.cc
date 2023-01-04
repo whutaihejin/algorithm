@@ -1,3 +1,4 @@
+#include <iostream>
 #include <stdio.h>
 #include <math.h>
 
@@ -13,6 +14,7 @@ int main() {
     printf("%.1f\n", 8.0 / 5.0);
     printf("%.2f\n", 8.0 / 5.0);
     printf("%.1f\n", 8 / 5);
+    std::cout << (8 / 5) << std::endl;
     printf("%d\n", 8.0 / 5.0);
 
     //
