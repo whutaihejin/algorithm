@@ -8,7 +8,7 @@ all: $(target)
 	@echo "target => " $(target)
 
 % : %.cc
-	$(CXX) -std=c++11 -g -O2 $< -o $@
+	$(CXX) -std=c++11 -g -O0 $< -o $@
 
 % : %.c
 	$(CC) -std=c11 -g -O0 $< -o $@
